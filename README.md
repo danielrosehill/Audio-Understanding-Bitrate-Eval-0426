@@ -16,6 +16,22 @@ Empirical eval measuring how MP3 compression bitrate affects transcription accur
 
 Full comparison table: [`results/summary.md`](results/summary.md). Raw per-call data: [`results/all.csv`](results/all.csv).
 
+## At a glance
+
+**The model trade-off** — bottom-left is the sweet spot (fast + accurate):
+
+![Accuracy vs latency](plots/accuracy_vs_latency.png)
+
+**WER barely moves with bitrate** for Gemini/Voxtral (green cluster) — OpenAI GPT-Audio family (top) is wildly inconsistent:
+
+![WER by bitrate](plots/wer_by_bitrate.png)
+
+**Reliability**: wide boxes = inconsistent behavior across the 20 calls per model. OpenAI models have long tails from occasional conversational responses; Gemini and Voxtral are tight:
+
+![WER distribution](plots/wer_distribution.png)
+
+More charts in [`plots/`](plots/). Regenerate any time with `python3 scripts/plot_results.py`.
+
 ## Why this eval exists
 
 Most guidance on audio bitrates for ML (e.g. Whisper, Deepgram) assumes you're feeding audio to a dedicated ASR model. Audio-input LLMs (Gemini's audio-capable tiers, GPT-Audio, Voxtral, MiMo) are a different animal — they tokenize audio through their own encoders and the behavior vs. bitrate isn't well characterized in public benchmarks.
