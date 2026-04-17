@@ -13,6 +13,7 @@ Usage:
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import matplotlib.patheffects as path_effects
 import numpy as np
 import pandas as pd
 
@@ -131,9 +132,12 @@ def plot_wer_heatmap(df: pd.DataFrame) -> None:
     for i in range(len(pivot.index)):
         for j in range(len(pivot.columns)):
             v = pivot.values[i, j]
-            color = "white" if v > 0.25 else "black"
-            ax.text(j, i, f"{v:.3f}", ha="center", va="center",
-                    color=color, fontsize=9)
+            txt = ax.text(j, i, f"{v:.3f}", ha="center", va="center",
+                          color="white", fontsize=9, fontweight="bold")
+            txt.set_path_effects([
+                path_effects.Stroke(linewidth=2, foreground="black"),
+                path_effects.Normal(),
+            ])
     cbar = fig.colorbar(im, ax=ax, shrink=0.8)
     cbar.set_label("Average WER", rotation=270, labelpad=15)
     ax.set_title("WER Heatmap — Model × Bitrate\n(green = accurate, red = poor)")
