@@ -4,7 +4,17 @@ Empirical eval measuring how MP3 compression bitrate affects transcription accur
 
 **Question**: If you're sending voice dictation audio to a multimodal LLM, how low can you drop the MP3 bitrate before transcription accuracy degrades?
 
-**TL;DR**: _(populated after the run completes — see [`results/summary.md`](results/summary.md))_
+## TL;DR
+
+| Finding | Detail |
+|---|---|
+| **Bitrate barely matters above ~16 kbps** for Gemini and Voxtral. WER curves are flat across 16-64 kbps within noise. | Sending audio at 64 kbps to these models is wasted bandwidth. 32 kbps is a reasonable default. |
+| **Best overall accuracy**: `google/gemini-3-flash-preview` | Averaged WER 0.014 across all bitrates. Most consistent model in the panel. |
+| **Best accuracy-per-second**: `mistralai/voxtral-small-24b-2507` | WER ~0.02, latency ~1.0s — roughly 2-8× faster than Gemini alternatives at comparable accuracy. |
+| **OpenAI GPT-Audio models are unreliable for transcription.** They occasionally respond conversationally to the audio ("That's a beautiful description…") rather than transcribing it, even with an explicit verbatim prompt. | When this happens WER spikes to 0.9-1.2. Not an audio-quality issue — a prompt-following behavioral quirk of that model family. |
+| **Gemini 2.5 Pro is overkill** for dictation. Same accuracy as Gemini 3 Flash Preview but 3-4× the latency and 5-10× the cost. | Reasoning capability is unused when the task is "type what you heard". |
+
+Full comparison table: [`results/summary.md`](results/summary.md). Raw per-call data: [`results/all.csv`](results/all.csv).
 
 ## Why this eval exists
 
